@@ -1,0 +1,23 @@
+{
+  "name": "Dynamic P5 Renderer",
+  "description": "",
+  "version": "0.0.1",
+  "author": "Andrew Watson",
+  "license": "Apache",
+  "scripts": {
+    "dev": "./node_modules/.bin/parcel src/index.html",
+    "prod": "./node_modules/.bin/parcel build src/index.html",
+    "build": "./node_modules/.bin/webpack"
+  },
+  "devDependencies": {
+    "parcel": "^1.10.3",
+    "parcel-bundler": "^1.12.5",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.1.3",
+    "webpack": "^5.78.0"
+  },
+  "dependencies": {
+    "@types/p5": "^0.9.1",
+    "p5": "^1.2.0"
+  }
+}
