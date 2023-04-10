@@ -1,13 +1,18 @@
 package com.creativedrewy.artwallpapers;
 
+import android.app.Presentation;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
+import android.hardware.display.DisplayManager;
+import android.hardware.display.VirtualDisplay;
 import android.service.wallpaper.WallpaperService;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
@@ -102,7 +107,7 @@ public class MyWallpaperService extends WallpaperService {
             // so we use the loadUrl mechanism to call some JavaScript to tell it to pause.
             if (visible) {
                 //myWebView.loadUrl("javascript:resumeWallpaper()");
-                drawFrame();
+                //drawFrame();
                 //handler.post(drawRunner);
             } else {
                 //myWebView.loadUrl("javascript:pauseWallpaper()");
@@ -129,26 +134,26 @@ public class MyWallpaperService extends WallpaperService {
                 }
             };
 
-            myWebView = new WebView(myContext);
-            myWebView.setWebViewClient(client);
-
-            WebView.setWebContentsDebuggingEnabled(true);
-            WebSettings webSettings = myWebView.getSettings();
-            webSettings.setJavaScriptEnabled(true);
-            webSettings.setDomStorageEnabled(true);
-            webSettings.setBlockNetworkLoads(false);
-            webSettings.setBlockNetworkImage(false);
-
-            myJSInterface = new JSInterface(this);
-            myWebView.addJavascriptInterface(myJSInterface, "androidWallpaperInterface");
-
-            myWebView.loadUrl("https://threejs.org/examples/webgl_loader_ldraw.html");
+//            myWebView = new WebView(myContext);
+//            myWebView.setWebViewClient(client);
+//
+//            WebView.setWebContentsDebuggingEnabled(true);
+//            WebSettings webSettings = myWebView.getSettings();
+//            webSettings.setJavaScriptEnabled(true);
+//            webSettings.setDomStorageEnabled(true);
+//            webSettings.setBlockNetworkLoads(false);
+//            webSettings.setBlockNetworkImage(false);
+//
+//            myJSInterface = new JSInterface(this);
+//            myWebView.addJavascriptInterface(myJSInterface, "androidWallpaperInterface");
+//
+//            myWebView.loadUrl("https://threejs.org/examples/webgl_loader_ldraw.html");
 
             // Create message receiver
             myMessageReceiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    drawFrame();
+                    //drawFrame();
                 }
             };
 
@@ -181,29 +186,57 @@ public class MyWallpaperService extends WallpaperService {
             log("On Surface Changed " + String.valueOf(format) + ", " + String.valueOf(width) + ", " + String.valueOf(height));
             super.onSurfaceChanged(holder, format, width, height);
 
-            if (myWebView != null) {
-                int widthSpec = View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY);
-                int heightSpec = View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY);
-                myWebView.measure(widthSpec, heightSpec);
-                myWebView.layout(0, 0, width, height);
-            }
+            DisplayManager mDisplayManager = (DisplayManager) getSystemService(Context.DISPLAY_SERVICE);
+
+            int flags = DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY;
+            int density = DisplayMetrics.DENSITY_DEFAULT;
+
+            VirtualDisplay virtualDisplay = mDisplayManager.createVirtualDisplay("MyVirtualDisplay",
+                    width, height - 300, density, holder.getSurface(), flags);
+
+            Presentation myPresentation = new Presentation(myContext, virtualDisplay.getDisplay());
+            myPresentation.show();
+
+            myWebView = new WebView(myPresentation.getContext());
+            //localWebView.loadUrl("https://threejs.org/examples/webgl_clipping_stencil.html");
+            //myWebView.loadUrl("https://threejs.org/examples/webgl_loader_ldraw.html");
+            myWebView.loadUrl("https://threejs.org/examples/webgl_animation_multiple.html");
+
+            WebView.setWebContentsDebuggingEnabled(true);
+            WebSettings webSettings = myWebView.getSettings();
+            webSettings.setUserAgentString("Android");
+            webSettings.setUseWideViewPort(false);
+            webSettings.setJavaScriptEnabled(true);
+            webSettings.setDomStorageEnabled(true);
+            webSettings.setBlockNetworkLoads(false);
+            webSettings.setBlockNetworkImage(false);
+
+            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams (width, height);
+            myPresentation.setContentView(myWebView, params);
+
+//            if (myWebView != null) {
+//                int widthSpec = View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY);
+//                int heightSpec = View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY);
+//                myWebView.measure(widthSpec, heightSpec);
+//                myWebView.layout(0, 0, width, height);
+//            }
         }
 
         public void drawFrame() {
             if (myWebView != null) {
-                try {
-                    Canvas canvas = myHolder.lockCanvas();
-                    if (canvas == null) {
-                        logError("Can't lock canvas");
-                    } else {
-                        myWebView.draw(canvas);
-                        myHolder.unlockCanvasAndPost(canvas);
-                    }
-
-                    Log.v("Andrew", "Drawing frame");
-                } catch (Exception e) {
-                    logError("drawing exception " + e.toString());
-                }
+//                try {
+//                    Canvas canvas = myHolder.lockCanvas();
+//                    if (canvas == null) {
+//                        logError("Can't lock canvas");
+//                    } else {
+//                        myWebView.draw(canvas);
+//                        myHolder.unlockCanvasAndPost(canvas);
+//                    }
+//
+//                    Log.v("Andrew", "Drawing frame");
+//                } catch (Exception e) {
+//                    logError("drawing exception " + e.toString());
+//                }
 
                 //handler.removeCallbacks(drawRunner);
                 //handler.postDelayed(drawRunner, 33);
