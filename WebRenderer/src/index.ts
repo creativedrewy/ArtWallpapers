@@ -1,17 +1,34 @@
 import p5 from "p5";
 
+let canvasWidth: Number
+let canvasHeight: Number
+
+let scriptSrc: string
+let userScript: HTMLScriptElement
+let p5Inst: p5
+
 function loadSketch(sketchText: string, width: string, height: string) {
-    //TODO:
-    //Parse width & height into numbers
+    canvasWidth = Number(width);
+    canvasHeight = Number(height);
+    scriptSrc = sketchText;
+
     //Parse sketch code & add our configuration stuff to it
+    resumeSketch()
 }
 
 function resumeSketch() {
-    //TODO: Remove p5 instance
+    userScript = document.createElement('script')
+    userScript.textContent = scriptSrc
+    document.body.appendChild(userScript);
+
+    p5Inst = new p5(undefined, undefined);
 }
 
 function pauseSketch() {
-    //TODO: Add p5 instance
+    let item = document.body.getElementsByClassName("p5Canvas")[0]
+    item.remove()
+    userScript.remove()
+    p5Inst.remove()
 }
 
 const testScript = `
@@ -20,7 +37,7 @@ const testScript = `
     let clr;
     
     function setup() {
-      createCanvas(360, 510);
+      createCanvas(400, 400);
     
       background(200);
       clr = color(255, 0, 0);
@@ -52,23 +69,13 @@ const testScript = `
 `
 
 window.onload = () => {
-    let userScript: HTMLScriptElement
-    let p5Inst: p5
-
-    const firstButton = document.getElementById("addButton")
-    firstButton.onclick = () => {
-        userScript = document.createElement('script')
-        userScript.textContent = testScript
-        document.body.appendChild(userScript);
-
-        p5Inst = new p5(undefined, undefined);
+    const addButton = document.getElementById("addButton")
+    addButton.onclick = () => {
+        loadSketch(testScript, "400", "400");
     }
 
     const removeButton = document.getElementById("removeButton")
     removeButton.onclick = () => {
-        let item = document.body.getElementsByClassName("p5Canvas")[0]
-        item.remove()
-        userScript.remove()
-        p5Inst.remove()
+        pauseSketch()
     }
 }
