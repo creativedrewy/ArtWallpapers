@@ -4,14 +4,12 @@ import android.app.Presentation;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Canvas;
 import android.hardware.display.DisplayManager;
 import android.hardware.display.VirtualDisplay;
 import android.service.wallpaper.WallpaperService;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.SurfaceHolder;
-import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebResourceRequest;
@@ -200,7 +198,8 @@ public class MyWallpaperService extends WallpaperService {
             myWebView = new WebView(myPresentation.getContext());
             //localWebView.loadUrl("https://threejs.org/examples/webgl_clipping_stencil.html");
             //myWebView.loadUrl("https://threejs.org/examples/webgl_loader_ldraw.html");
-            myWebView.loadUrl("https://threejs.org/examples/webgl_animation_multiple.html");
+            //myWebView.loadUrl("https://threejs.org/examples/webgl_animation_multiple.html");
+            myWebView.loadUrl("file:///android_asset/index.html");
 
             WebView.setWebContentsDebuggingEnabled(true);
             WebSettings webSettings = myWebView.getSettings();
@@ -210,6 +209,8 @@ public class MyWallpaperService extends WallpaperService {
             webSettings.setDomStorageEnabled(true);
             webSettings.setBlockNetworkLoads(false);
             webSettings.setBlockNetworkImage(false);
+            webSettings.setAllowFileAccessFromFileURLs(true);
+            webSettings.setAllowUniversalAccessFromFileURLs(true);
 
             ViewGroup.LayoutParams params = new ViewGroup.LayoutParams (width, height);
             myPresentation.setContentView(myWebView, params);

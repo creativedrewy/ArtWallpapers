@@ -23,3 +23,5 @@ mapping/
 
 #MacOS stuff
 .DS_Store
+
+.parcel-cache/

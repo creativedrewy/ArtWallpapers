@@ -17,7 +17,7 @@ function loadSketch(sketchText: string, width: string, height: string) {
     //Parse sketch code & add our configuration stuff to it
     scriptSrc = sanitizeSetup(sketchText, width, height);
 
-    resumeSketch()
+    resumeSketch();
 }
 
 /**
@@ -82,7 +82,7 @@ function pauseSketch() {
 
 const testScript = `
     let rectX = 0;
-    let fr = 30; //starting FPS
+    let fr = 30;
     let clr;
     
     function setup() {
@@ -118,6 +118,8 @@ const testScript = `
 `
 
 window.onload = () => {
+    loadSketch(testScript, "360", "520");
+
     const addButton = document.getElementById("addButton")
     addButton.onclick = () => {
         loadSketch(testScript, "360", "520");
