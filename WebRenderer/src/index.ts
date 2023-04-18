@@ -1,4 +1,7 @@
 import p5 from "p5";
+import {parseScript, Program, Syntax} from "esprima";
+import {generate} from "escodegen";
+import {CallExpression, ExpressionStatement, Identifier} from "estree";
 
 let canvasWidth: Number
 let canvasHeight: Number
@@ -10,10 +13,56 @@ let p5Inst: p5
 function loadSketch(sketchText: string, width: string, height: string) {
     canvasWidth = Number(width);
     canvasHeight = Number(height);
-    scriptSrc = sketchText;
 
     //Parse sketch code & add our configuration stuff to it
+    scriptSrc = sanitizeSetup(sketchText, width, height);
+
     resumeSketch()
+}
+
+/**
+ * Remove any existing canvas & framerate configuration in the setup method and replace with our own
+ */
+function sanitizeSetup(script: string, width: string, height: string) {
+    let ast: Program;
+
+    try {
+        ast = parseScript(script);
+    } catch (e) {
+        return script;
+    }
+
+    for (let i = 0; i < ast.body.length; i++) {
+        let statement = ast.body[i];
+
+        if (statement.type === Syntax.FunctionDeclaration) {
+            if (statement.id.name === "setup") {
+                let setupBody: ExpressionStatement[] = [];
+
+                let canvasAst = parseScript(`createCanvas(${width}, ${height})`);
+                setupBody.push(canvasAst.body[0] as ExpressionStatement);
+
+                statement.body.body.forEach((statement: ExpressionStatement) => {
+                    if (statement.type === Syntax.ExpressionStatement && statement.expression.type === Syntax.CallExpression) {
+                        let name = ((statement.expression as CallExpression).callee as Identifier | null)?.name;
+
+                        if (name != "createCanvas" && name != "frameRate") {
+                            setupBody.push(statement);
+                        }
+                    } else {
+                        setupBody.push(statement);
+                    }
+                })
+
+                let frameRateAst = parseScript("frameRate(30)");
+                setupBody.push(frameRateAst.body[0] as ExpressionStatement);
+
+                statement.body.body = setupBody;
+            }
+        }
+    }
+
+    return generate(ast);
 }
 
 function resumeSketch() {
@@ -71,7 +120,7 @@ const testScript = `
 window.onload = () => {
     const addButton = document.getElementById("addButton")
     addButton.onclick = () => {
-        loadSketch(testScript, "400", "400");
+        loadSketch(testScript, "360", "520");
     }
 
     const removeButton = document.getElementById("removeButton")
