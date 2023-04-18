@@ -199,7 +199,7 @@ public class MyWallpaperService extends WallpaperService {
             //localWebView.loadUrl("https://threejs.org/examples/webgl_clipping_stencil.html");
             //myWebView.loadUrl("https://threejs.org/examples/webgl_loader_ldraw.html");
             //myWebView.loadUrl("https://threejs.org/examples/webgl_animation_multiple.html");
-            myWebView.loadUrl("file:///android_asset/index.html");
+            myWebView.loadUrl("file:///android_asset/bin/index.html");
 
             WebView.setWebContentsDebuggingEnabled(true);
             WebSettings webSettings = myWebView.getSettings();

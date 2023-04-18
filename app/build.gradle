@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id "com.github.node-gradle.node" version "3.5.1"
 }
 
 android {
@@ -68,8 +69,17 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_ui_version"
 }
 
-task deleteWebBuild(type: Delete) {
+node {
+    nodeProjectDir = file("${project.rootDir}/WebRenderer")
+}
+
+task clearExistingWebBuild(type: Delete) {
     delete files("src/main/assets/bin")
 }
 
-preBuild.dependsOn myDeleteTask
+task buildWebRenderer(type: NpmTask) {
+    args = ['run', 'prod']
+}
+
+preBuild.dependsOn buildWebRenderer
+buildWebRenderer.dependsOn clearExistingWebBuild
