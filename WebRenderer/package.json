@@ -5,8 +5,8 @@
   "author": "Andrew Watson",
   "license": "Apache",
   "scripts": {
-    "dev": "parcel src/index.html",
-    "prod": "parcel build --dist-dir ../app/src/main/assets/ src/index.html"
+    "dev": "parcel serve src/index.html",
+    "prod": "parcel build --no-cache --dist-dir ../app/src/main/assets/bin/ src/index.html"
   },
   "devDependencies": {
     "@types/esprima": "^4.0.3",

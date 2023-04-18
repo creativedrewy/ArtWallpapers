@@ -118,11 +118,13 @@ const testScript = `
 `
 
 window.onload = () => {
-    loadSketch(testScript, "360", "520");
+    setTimeout(() => {
+        loadSketch(testScript, "1080", "2220");
+    }, 2000)
 
     const addButton = document.getElementById("addButton")
     addButton.onclick = () => {
-        loadSketch(testScript, "360", "520");
+        loadSketch(testScript, "1080", "2220");
     }
 
     const removeButton = document.getElementById("removeButton")
