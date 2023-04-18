@@ -6,7 +6,7 @@
   "license": "Apache",
   "scripts": {
     "dev": "parcel serve src/index.html",
-    "prod": "parcel build --no-cache --dist-dir ../app/src/main/assets/bin/ src/index.html"
+    "prod": "parcel build --no-source-maps --no-cache --public-url \"./\"  --dist-dir ../app/src/main/assets/bin/ src/index.html"
   },
   "devDependencies": {
     "@types/esprima": "^4.0.3",

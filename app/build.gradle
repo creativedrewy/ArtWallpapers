@@ -79,6 +79,7 @@ task clearExistingWebBuild(type: Delete) {
 
 task buildWebRenderer(type: NpmTask) {
     args = ['run', 'prod']
+    dependsOn clearExistingWebBuild
 }
 
 preBuild.dependsOn buildWebRenderer
