@@ -11,7 +11,9 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.ViewGroup;
+import android.webkit.ConsoleMessage;
 import android.webkit.JavascriptInterface;
+import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -125,12 +127,12 @@ public class MyWallpaperService extends WallpaperService {
                 myWebView.destroy();
             }
 
-            WebViewClient client = new WebViewClient() {
-                @Override
-                public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                    return false;
-                }
-            };
+//            WebViewClient client = new WebViewClient() {
+//                @Override
+//                public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+//                    return false;
+//                }
+//            };
 
 //            myWebView = new WebView(myContext);
 //            myWebView.setWebViewClient(client);
@@ -195,11 +197,13 @@ public class MyWallpaperService extends WallpaperService {
             Presentation myPresentation = new Presentation(myContext, virtualDisplay.getDisplay());
             myPresentation.show();
 
+
+
             myWebView = new WebView(myPresentation.getContext());
             //localWebView.loadUrl("https://threejs.org/examples/webgl_clipping_stencil.html");
             //myWebView.loadUrl("https://threejs.org/examples/webgl_loader_ldraw.html");
             //myWebView.loadUrl("https://threejs.org/examples/webgl_animation_multiple.html");
-            myWebView.loadUrl("file:///android_asset/bin/index.html");
+            //myWebView.loadUrl("file:///android_asset/bin/index.html");
 
             WebView.setWebContentsDebuggingEnabled(true);
             WebSettings webSettings = myWebView.getSettings();
@@ -214,6 +218,31 @@ public class MyWallpaperService extends WallpaperService {
 
             ViewGroup.LayoutParams params = new ViewGroup.LayoutParams (width, height);
             myPresentation.setContentView(myWebView, params);
+
+            WebViewClient client = new WebViewClient() {
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                    return false;
+                }
+
+                @Override
+                public void onPageFinished(WebView view, String url) {
+                    myWebView.loadUrl("javascript:testMe()");
+                }
+            };
+
+            myWebView.setWebViewClient(client);
+            myWebView.setWebChromeClient(new WebChromeClient() {
+                @Override
+                public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
+                    Log.d("MyApplication", consoleMessage.message() + " -- From line "
+                            + consoleMessage.lineNumber() + " of "
+                            + consoleMessage.sourceId());
+                    return super.onConsoleMessage(consoleMessage);
+                }
+            });
+
+            myWebView.loadUrl("file:///android_asset/bin/index.html");
 
 //            if (myWebView != null) {
 //                int widthSpec = View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY);

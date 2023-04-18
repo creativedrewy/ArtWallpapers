@@ -1,3 +1,5 @@
+export {};
+
 import p5 from "p5";
 import {parseScript, Program, Syntax} from "esprima";
 import {generate} from "escodegen";
@@ -10,7 +12,19 @@ let scriptSrc: string
 let userScript: HTMLScriptElement
 let p5Inst: p5
 
-function loadSketch(sketchText: string, width: string, height: string) {
+window.testMe = () => {
+    // setTimeout(() => {
+        loadSketch(testScript, "540", "1110");
+    // }, 2000)
+}
+
+export function testMe() {
+    setTimeout(() => {
+        loadSketch(testScript, "540", "1110");
+    }, 2000)
+}
+
+export function loadSketch(sketchText: string, width: string, height: string) {
     canvasWidth = Number(width);
     canvasHeight = Number(height);
 
@@ -23,7 +37,7 @@ function loadSketch(sketchText: string, width: string, height: string) {
 /**
  * Remove any existing canvas & framerate configuration in the setup method and replace with our own
  */
-function sanitizeSetup(script: string, width: string, height: string) {
+export function sanitizeSetup(script: string, width: string, height: string) {
     let ast: Program;
 
     try {
@@ -65,7 +79,7 @@ function sanitizeSetup(script: string, width: string, height: string) {
     return generate(ast);
 }
 
-function resumeSketch() {
+export function resumeSketch() {
     userScript = document.createElement('script')
     userScript.textContent = scriptSrc
     document.body.appendChild(userScript);
@@ -73,7 +87,7 @@ function resumeSketch() {
     p5Inst = new p5(undefined, undefined);
 }
 
-function pauseSketch() {
+export function pauseSketch() {
     let item = document.body.getElementsByClassName("p5Canvas")[0]
     item.remove()
     userScript.remove()
@@ -118,13 +132,9 @@ const testScript = `
 `
 
 window.onload = () => {
-    setTimeout(() => {
-        loadSketch(testScript, "1080", "2220");
-    }, 2000)
-
     const addButton = document.getElementById("addButton")
     addButton.onclick = () => {
-        loadSketch(testScript, "1080", "2220");
+        loadSketch(testScript, "540", "1110");
     }
 
     const removeButton = document.getElementById("removeButton")
