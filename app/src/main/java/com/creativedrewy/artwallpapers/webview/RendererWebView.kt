@@ -1,41 +1,45 @@
 package com.creativedrewy.artwallpapers.webview
 
+import android.annotation.SuppressLint
 import android.content.Context
-import android.webkit.WebView
+import android.util.Log
+import android.webkit.*
 
+@SuppressLint("SetJavaScriptEnabled")
 class RendererWebView(
     context: Context
 ) : WebView(context) {
 
+    private val webViewClient = object : WebViewClient() {
+        override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean = false
+
+        override fun onPageFinished(view: WebView?, url: String?) {
+            //TODO: Figure out actual init method here
+            view?.loadUrl("javascript:runTest()");
+        }
+    }
+
+    private val webChromeClient = object : WebChromeClient() {
+        override fun onConsoleMessage(consoleMessage: ConsoleMessage?): Boolean {
+            consoleMessage?.let { msg ->
+                Log.d("ArtWallpaper", "${ msg.message() } :: From line ${ msg.lineNumber() } of ${ msg.sourceId() }")
+            }
+
+            return super.onConsoleMessage(consoleMessage)
+        }
+    }
+
     init {
-//            WebView.setWebContentsDebuggingEnabled(true);
-//            WebSettings webSettings = myWebView.getSettings();
-//            webSettings.setUserAgentString("Android");
-//            webSettings.setUseWideViewPort(false);
-//            webSettings.setJavaScriptEnabled(true);
-//            webSettings.setBlockNetworkImage(false);
+        setWebContentsDebuggingEnabled(true)
 
-//            WebViewClient client = new WebViewClient() {
-//                @Override
-//                public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-//                    return true;
-//                }
-//
-//                @Override
-//                public void onPageFinished(WebView view, String url) {
-//                    myWebView.loadUrl("javascript:runTest()");
-//                }
-//            };
+        settings.userAgentString = "Android"
+        settings.useWideViewPort = false
+        settings.javaScriptEnabled = true
+        settings.blockNetworkImage = false
+        settings.blockNetworkLoads = true
 
-        //            myWebView.setWebChromeClient(new WebChromeClient() {
-        //                @Override
-        //                public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-        //                    Log.d("MyApplication", consoleMessage.message() + " -- From line "
-        //                            + consoleMessage.lineNumber() + " of "
-        //                            + consoleMessage.sourceId());
-        //                    return super.onConsoleMessage(consoleMessage);
-        //                }
-        //            });
+        setWebViewClient(webViewClient)
+        setWebChromeClient(webChromeClient)
     }
 
 }
