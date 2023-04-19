@@ -45,13 +45,13 @@ class ArtWallpaperService : WallpaperService() {
         override fun onVisibilityChanged(visible: Boolean) {
             super.onVisibilityChanged(visible)
 
-            if (visible) {
-                if (rendererWebView?.isLoaded == true) {
-                    rendererWebView?.loadUrl("javascript:resumeSketch()")
-                }
-            } else {
-                rendererWebView?.loadUrl("javascript:pauseSketch()")
-            }
+//            if (visible) {
+//                if (rendererWebView?.isLoaded == true) {
+//                    rendererWebView?.loadUrl("javascript:resumeSketch()")
+//                }
+//            } else {
+//                rendererWebView?.loadUrl("javascript:pauseSketch()")
+//            }
         }
 
         override fun onDestroy() {

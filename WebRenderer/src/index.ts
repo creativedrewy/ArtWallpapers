@@ -12,8 +12,10 @@ let scriptSrc: string
 let userScript: HTMLScriptElement
 let p5Inst: p5
 
-window.runTest = () => {
-    window.loadSketch(testScript, "300", "300")
+window.loadEncodedSketch = (contents: string, width: string, height: string) => {
+    const decodedSketch = atob(contents)
+
+    window.loadSketch(decodedSketch, width, height);
 }
 
 window.loadSketch = (sketchText: string, width: string, height: string) => {
