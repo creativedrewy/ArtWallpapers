@@ -32,9 +32,9 @@
         </activity>
 
         <service
-            android:name="MyWallpaperService"
+            android:name=".service.ArtWallpaperService"
             android:enabled="true"
-            android:label="Wallpaper Example"
+            android:label="Art Wallpaper"
             android:exported="true"
             android:permission="android.permission.BIND_WALLPAPER" >
 

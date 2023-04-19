@@ -15,7 +15,10 @@ class RendererWebView(
 
         override fun onPageFinished(view: WebView?, url: String?) {
             //TODO: Figure out actual init method here
-            view?.loadUrl("javascript:runTest()");
+            view?.loadUrl("javascript:runTest()")
+            view?.loadUrl("javascript:resumeSketch()")
+
+            isLoaded = true
         }
     }
 
@@ -29,6 +32,8 @@ class RendererWebView(
         }
     }
 
+    var isLoaded = false
+
     init {
         setWebContentsDebuggingEnabled(true)
 
@@ -41,5 +46,4 @@ class RendererWebView(
         setWebViewClient(webViewClient)
         setWebChromeClient(webChromeClient)
     }
-
 }

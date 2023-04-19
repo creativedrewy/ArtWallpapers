@@ -15,6 +15,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.creativedrewy.artwallpapers.service.ArtWallpaperService
 import com.creativedrewy.artwallpapers.ui.theme.ArtWallpapersTheme
 
 
@@ -34,7 +35,7 @@ class MainActivity : ComponentActivity() {
                             val intent = Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER)
                             intent.putExtra(
                                 WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,
-                                ComponentName(this, MyWallpaperService::class.java)
+                                ComponentName(this, ArtWallpaperService::class.java)
                             )
 
                             startActivity(intent)

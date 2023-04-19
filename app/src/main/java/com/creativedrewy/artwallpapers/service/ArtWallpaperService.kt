@@ -37,39 +37,29 @@ class ArtWallpaperService : WallpaperService() {
             rendererWebView?.let {
                 val params = ViewGroup.LayoutParams(width, height)
                 presentation.setContentView(it, params)
+
+                it.loadUrl("file:///android_asset/bin/index.html")
             }
         }
-
-
 
         override fun onVisibilityChanged(visible: Boolean) {
             super.onVisibilityChanged(visible)
 
             if (visible) {
-                rendererWebView?.loadUrl("javascript:resumeSketch()")
+                if (rendererWebView?.isLoaded == true) {
+                    rendererWebView?.loadUrl("javascript:resumeSketch()")
+                }
             } else {
                 rendererWebView?.loadUrl("javascript:pauseSketch()")
             }
         }
 
         override fun onDestroy() {
-            rendererWebView?.loadUrl("")
+            rendererWebView?.loadUrl("about:blank")
+            rendererWebView?.destroy()
             rendererWebView = null
 
             super.onDestroy()
         }
-
-//        override fun onSurfaceDestroyed(holder: SurfaceHolder) {
-//            super.onSurfaceDestroyed(holder)
-//        }
-
-//        override fun onCreate(surfaceHolder: SurfaceHolder) {
-//            super.onCreate(surfaceHolder)
-//        }
-
-//        override fun onSurfaceCreated(holder: SurfaceHolder) {
-//            super.onSurfaceCreated(holder)
-//        }
-
     }
 }
