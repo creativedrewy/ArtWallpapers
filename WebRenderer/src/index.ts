@@ -22,8 +22,6 @@ window.loadSketch = (sketchText: string, width: string, height: string) => {
 
     //Parse sketch code & add our configuration stuff to it
     scriptSrc = sanitizeSetup(sketchText, width, height);
-
-    window.resumeSketch();
 }
 
 /**
