@@ -25,3 +25,6 @@ mapping/
 .DS_Store
 
 .parcel-cache/
+/app/WebRenderer/node_modules/.yarn-integrity
+bin/
+yarn.lock

@@ -12,32 +12,24 @@ let scriptSrc: string
 let userScript: HTMLScriptElement
 let p5Inst: p5
 
-window.testMe = () => {
-    // setTimeout(() => {
-        loadSketch(testScript, "540", "1110");
-    // }, 2000)
+window.runTest = () => {
+    window.loadSketch(testScript, "300", "300")
 }
 
-export function testMe() {
-    setTimeout(() => {
-        loadSketch(testScript, "540", "1110");
-    }, 2000)
-}
-
-export function loadSketch(sketchText: string, width: string, height: string) {
+window.loadSketch = (sketchText: string, width: string, height: string) => {
     canvasWidth = Number(width);
     canvasHeight = Number(height);
 
     //Parse sketch code & add our configuration stuff to it
     scriptSrc = sanitizeSetup(sketchText, width, height);
 
-    resumeSketch();
+    window.resumeSketch();
 }
 
 /**
  * Remove any existing canvas & framerate configuration in the setup method and replace with our own
  */
-export function sanitizeSetup(script: string, width: string, height: string) {
+function sanitizeSetup(script: string, width: string, height: string) {
     let ast: Program;
 
     try {
@@ -79,7 +71,7 @@ export function sanitizeSetup(script: string, width: string, height: string) {
     return generate(ast);
 }
 
-export function resumeSketch() {
+window.resumeSketch = () => {
     userScript = document.createElement('script')
     userScript.textContent = scriptSrc
     document.body.appendChild(userScript);
@@ -87,7 +79,7 @@ export function resumeSketch() {
     p5Inst = new p5(undefined, undefined);
 }
 
-export function pauseSketch() {
+window.pauseSketch = () => {
     let item = document.body.getElementsByClassName("p5Canvas")[0]
     item.remove()
     userScript.remove()
@@ -134,11 +126,11 @@ const testScript = `
 window.onload = () => {
     const addButton = document.getElementById("addButton")
     addButton.onclick = () => {
-        loadSketch(testScript, "540", "1110");
+        window.loadSketch(testScript, "540", "1110");
     }
 
     const removeButton = document.getElementById("removeButton")
     removeButton.onclick = () => {
-        pauseSketch()
+        window.pauseSketch()
     }
 }

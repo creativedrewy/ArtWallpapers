@@ -227,7 +227,7 @@ public class MyWallpaperService extends WallpaperService {
 
                 @Override
                 public void onPageFinished(WebView view, String url) {
-                    myWebView.loadUrl("javascript:testMe()");
+                    myWebView.loadUrl("javascript:runTest()");
                 }
             };
 
