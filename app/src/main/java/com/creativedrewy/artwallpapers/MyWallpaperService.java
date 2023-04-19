@@ -152,7 +152,7 @@ public class MyWallpaperService extends WallpaperService {
             int density = DisplayMetrics.DENSITY_DEFAULT;
 
             VirtualDisplay virtualDisplay = mDisplayManager.createVirtualDisplay("MyVirtualDisplay",
-                    width, height - 300, density, holder.getSurface(), flags);
+                    width, height, density, holder.getSurface(), flags);
 
             Presentation myPresentation = new Presentation(myContext, virtualDisplay.getDisplay());
             myPresentation.show();
@@ -163,11 +163,7 @@ public class MyWallpaperService extends WallpaperService {
             webSettings.setUserAgentString("Android");
             webSettings.setUseWideViewPort(false);
             webSettings.setJavaScriptEnabled(true);
-            webSettings.setDomStorageEnabled(true);
-            webSettings.setBlockNetworkLoads(false);
             webSettings.setBlockNetworkImage(false);
-            webSettings.setAllowFileAccessFromFileURLs(true);
-            webSettings.setAllowUniversalAccessFromFileURLs(true);
 
             ViewGroup.LayoutParams params = new ViewGroup.LayoutParams (width, height);
             myPresentation.setContentView(myWebView, params);
@@ -175,7 +171,7 @@ public class MyWallpaperService extends WallpaperService {
             WebViewClient client = new WebViewClient() {
                 @Override
                 public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                    return false;
+                    return true;
                 }
 
                 @Override
