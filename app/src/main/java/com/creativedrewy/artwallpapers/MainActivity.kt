@@ -40,7 +40,7 @@ class MainActivity : ComponentActivity() {
                             startActivity(intent)
                         }
                     ) {
-                        Text(text = "Click me")
+                        Text(text = "Set Wallpaper")
                     }
                 }
             }
@@ -51,7 +51,5 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    ArtWallpapersTheme {
-
-    }
+    ArtWallpapersTheme { }
 }
