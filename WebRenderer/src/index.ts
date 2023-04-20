@@ -24,6 +24,9 @@ window.loadSketch = (sketchText: string, width: string, height: string) => {
 
     //Parse sketch code & add our configuration stuff to it
     scriptSrc = sanitizeSetup(sketchText, width, height);
+
+    console.log(scriptSrc)
+    // scriptSrc = sketchText
 }
 
 /**
@@ -45,6 +48,7 @@ function sanitizeSetup(script: string, width: string, height: string) {
             if (statement.id.name === "setup") {
                 let setupBody: ExpressionStatement[] = [];
 
+                //let canvasAst = parseScript(`createCanvas(400, 800, WEBGL)`);
                 let canvasAst = parseScript(`createCanvas(${width}, ${height})`);
                 setupBody.push(canvasAst.body[0] as ExpressionStatement);
 
@@ -86,7 +90,7 @@ window.pauseSketch = () => {
     p5Inst.remove()
 }
 
-const testScript = `
+window.testScript = `
     let rectX = 0;
     let fr = 30;
     let clr;
@@ -122,15 +126,3 @@ const testScript = `
       rect(rectX, height / 2, 20, 20);
     }
 `
-
-window.onload = () => {
-    const addButton = document.getElementById("addButton")
-    addButton.onclick = () => {
-        window.loadSketch(testScript, "540", "1110");
-    }
-
-    const removeButton = document.getElementById("removeButton")
-    removeButton.onclick = () => {
-        window.pauseSketch()
-    }
-}

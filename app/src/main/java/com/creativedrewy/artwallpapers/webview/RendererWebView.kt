@@ -53,39 +53,40 @@ class RendererWebView(
     }
 
     var testSketch = """
-        let rectX = 0;
-        let fr = 30;
-        let clr;
-        
-        function setup() {
-          createCanvas(400, 400);
-        
-          background(200);
-          clr = color(255, 0, 0);
-        
-          frameRate(30);
-        }
-        
-        function draw() {
-          background(200);
-          rectX += 1; // Move Rectangle
-        
-          if (rectX >= width) {
-            // If you go off screen.
-            if (fr === 30) {
-              clr = color(0, 0, 255);
-              fr = 10;
-              //frameRate(fr);
-            } else {
-              clr = color(255, 0, 0);
-              fr = 30;
-              //frameRate(fr);
-            }
-            rectX = 0;
-          }
-        
-          fill(clr);
-          rect(rectX, height / 2, 20, 20);
-        }
+//Inspired by @aemkei https://twitter.com/aemkei/status/1378106731386040322
+y=0
+w=1024
+
+function setup() {
+	noStroke()
+}
+
+function draw() {
+  y+=s=1
+  copy(0,0,w,w,0,s,w,w)
+  fill("white")
+  rect(0,0,w,s)
+  for(i=s;i--;)
+    for(x=w;x--;){
+      a=x^y+i;
+      b=a^a*2;
+      if(b%63==0){
+        fill("red")
+        rect(x,i,2,2)
+      }
+      if(b%65==0){
+        fill("blue")
+        rect(x,i,2,2)
+      }
+      if(b%66==0){
+        fill("green")
+        rect(x,i,2,2)
+      }
+			if(b%31==0){
+        fill("black")
+        rect(x,i,2,2)
+      }
+    }
+}
     """.trimIndent()
 }
