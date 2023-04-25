@@ -5,7 +5,6 @@ import android.content.Context
 import android.hardware.display.DisplayManager
 import android.service.wallpaper.WallpaperService
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.SurfaceHolder
 import android.view.ViewGroup
 import com.creativedrewy.artwallpapers.webview.RendererWebView
@@ -34,7 +33,7 @@ class ArtWallpaperService : WallpaperService() {
             val presentation = Presentation(context, virtualDisplay.display)
             presentation.show()
 
-            rendererWebView = RendererWebView(presentation.context)
+            rendererWebView = RendererWebView(presentation.context, width / 2, height / 2)
             rendererWebView?.let {
                 val params = ViewGroup.LayoutParams(width, height)
                 presentation.setContentView(it, params)
@@ -49,10 +48,8 @@ class ArtWallpaperService : WallpaperService() {
             if (rendererWebView?.firstLoadComplete == false) return
 
             if (visible) {
-                Log.v("RendererWebView", ">> Starting resume in service, isNull: ${rendererWebView == null}")
                 rendererWebView?.loadUrl("javascript:resumeSketch()")
             } else {
-                Log.v("RendererWebView", ">> Starting teardown in service")
                 rendererWebView?.loadUrl("javascript:pauseSketch()")
             }
         }

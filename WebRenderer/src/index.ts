@@ -26,8 +26,6 @@ window.loadSketch = (sketchText: string, width: string, height: string) => {
     scriptSrc = sanitizeSetup(sketchText, width, height);
 
     window.resumeSketch();
-    // console.log(scriptSrc)
-    // scriptSrc = sketchText
 }
 
 /**
@@ -49,7 +47,7 @@ function sanitizeSetup(script: string, width: string, height: string) {
             if (statement.id.name === "setup") {
                 let setupBody: ExpressionStatement[] = [];
 
-                //let canvasAst = parseScript(`createCanvas(400, 800, WEBGL)`);
+                //TODO: WEBGL configuration
                 let canvasAst = parseScript(`createCanvas(${width}, ${height})`);
                 setupBody.push(canvasAst.body[0] as ExpressionStatement);
 
@@ -57,6 +55,7 @@ function sanitizeSetup(script: string, width: string, height: string) {
                     if (statement.type === Syntax.ExpressionStatement && statement.expression.type === Syntax.CallExpression) {
                         let name = ((statement.expression as CallExpression).callee as Identifier | null)?.name;
 
+                        //TODO: his does not handle all configuration-type code
                         if (name != "createCanvas" && name != "frameRate") {
                             setupBody.push(statement);
                         }
@@ -78,8 +77,6 @@ function sanitizeSetup(script: string, width: string, height: string) {
 
 window.resumeSketch = () => {
     if (!p5Inst) {
-        console.log("::: Recreating p5 after teardown")
-
         userScript = document.createElement('script')
         userScript.textContent = scriptSrc
         document.body.appendChild(userScript);
@@ -90,8 +87,6 @@ window.resumeSketch = () => {
 
 window.pauseSketch = () => {
     if (p5Inst) {
-        console.log("::: Tearing down p5 for now")
-
         let item = document.body.getElementsByClassName("p5Canvas")[0]
         item.remove()
         userScript.remove()

@@ -10,7 +10,9 @@ import java.nio.charset.Charset
 
 @SuppressLint("SetJavaScriptEnabled")
 class RendererWebView(
-    context: Context
+    context: Context,
+    private val width: Int,
+    private val height: Int
 ) : WebView(context) {
 
     private val webViewClient = object : WebViewClient() {
@@ -19,11 +21,10 @@ class RendererWebView(
         override fun onPageFinished(view: WebView?, url: String?) {
             val encodedSketch = Base64.encodeToString(testSketch.toByteArray(Charset.forName("UTF-8")), Base64.DEFAULT)
 
-            view?.loadUrl("javascript:loadEncodedSketch('$encodedSketch', '400', '850')")
+            view?.loadUrl("javascript:loadEncodedSketch('$encodedSketch', '$width', '$height')")
 
-            Log.v("RendererWebView", ">> This page loaded once")
 
-            //Set the client to default instance soi this callback won't keep getting called
+            //Set the client to default instance so this callback doesn't keep getting called
             setWebViewClient(WebViewClient())
             firstLoadComplete = true
         }
