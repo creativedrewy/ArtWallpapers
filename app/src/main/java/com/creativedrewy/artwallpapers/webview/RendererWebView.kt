@@ -57,39 +57,44 @@ class RendererWebView(
 
     var testSketch = """
 //Inspired by @aemkei https://twitter.com/aemkei/status/1378106731386040322
-y=0
-w=1024
+y = 0
+w = 1024
 
 function setup() {
-	noStroke()
+    w = windowWidth
+
+    noStroke()
+    noLoop()
 }
 
 function draw() {
-  y+=s=1
-  copy(0,0,w,w,0,s,w,w)
-  fill("white")
-  rect(0,0,w,s)
-  for(i=s;i--;)
-    for(x=w;x--;){
-      a=x^y+i;
-      b=a^a*2;
-      if(b%63==0){
-        fill("red")
-        rect(x,i,2,2)
-      }
-      if(b%65==0){
-        fill("blue")
-        rect(x,i,2,2)
-      }
-      if(b%66==0){
-        fill("green")
-        rect(x,i,2,2)
-      }
-			if(b%31==0){
-        fill("black")
-        rect(x,i,2,2)
-      }
-    }
+    y += s = windowHeight
+    copy(0, 0, w, w, 0, s, w, w)
+    fill("white")
+    
+    rect(0, 0, w, s)
+    for (i = s; i--;)
+        for (x = w; x--;) {
+            a = x ^ y + i;
+            b = a ^ a * 2;
+            
+            if (b % 63 == 0) {
+                fill("red")
+                rect(x, i, 2, 2)
+            }
+            if (b % 65 == 0) {
+                fill("blue")
+                rect(x, i, 2, 2)
+            }
+            if (b % 66 == 0) {
+                fill("green")
+                rect(x, i, 2, 2)
+            }
+            if (b % 31 == 0) {
+                fill("black")
+                rect(x, i, 2, 2)
+            }
+        }
 }
     """.trimIndent()
 }
