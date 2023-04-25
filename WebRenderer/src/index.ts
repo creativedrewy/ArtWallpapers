@@ -10,7 +10,7 @@ let canvasHeight: Number
 
 let scriptSrc: string
 let userScript: HTMLScriptElement
-let p5Inst: p5
+let p5Inst: p5 | undefined = undefined
 
 window.loadEncodedSketch = (contents: string, width: string, height: string) => {
     const decodedSketch = atob(contents)
@@ -25,7 +25,8 @@ window.loadSketch = (sketchText: string, width: string, height: string) => {
     //Parse sketch code & add our configuration stuff to it
     scriptSrc = sanitizeSetup(sketchText, width, height);
 
-    console.log(scriptSrc)
+    window.resumeSketch();
+    // console.log(scriptSrc)
     // scriptSrc = sketchText
 }
 
@@ -76,18 +77,27 @@ function sanitizeSetup(script: string, width: string, height: string) {
 }
 
 window.resumeSketch = () => {
-    userScript = document.createElement('script')
-    userScript.textContent = scriptSrc
-    document.body.appendChild(userScript);
+    if (!p5Inst) {
+        console.log("::: Recreating p5 after teardown")
 
-    p5Inst = new p5(undefined, undefined);
+        userScript = document.createElement('script')
+        userScript.textContent = scriptSrc
+        document.body.appendChild(userScript);
+
+        p5Inst = new p5(undefined, undefined);
+    }
 }
 
 window.pauseSketch = () => {
-    let item = document.body.getElementsByClassName("p5Canvas")[0]
-    item.remove()
-    userScript.remove()
-    p5Inst.remove()
+    if (p5Inst) {
+        console.log("::: Tearing down p5 for now")
+
+        let item = document.body.getElementsByClassName("p5Canvas")[0]
+        item.remove()
+        userScript.remove()
+        p5Inst.remove()
+        p5Inst = undefined;
+    }
 }
 
 window.testScript = `

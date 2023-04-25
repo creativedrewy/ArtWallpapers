@@ -17,27 +17,29 @@ class RendererWebView(
         override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean = false
 
         override fun onPageFinished(view: WebView?, url: String?) {
-            //TODO: Figure out actual init method here
             val encodedSketch = Base64.encodeToString(testSketch.toByteArray(Charset.forName("UTF-8")), Base64.DEFAULT)
 
             view?.loadUrl("javascript:loadEncodedSketch('$encodedSketch', '400', '850')")
-            view?.loadUrl("javascript:resumeSketch()")
 
-            isLoaded = true
+            Log.v("RendererWebView", ">> This page loaded once")
+
+            //Set the client to default instance soi this callback won't keep getting called
+            setWebViewClient(WebViewClient())
+            firstLoadComplete = true
         }
     }
 
     private val webChromeClient = object : WebChromeClient() {
         override fun onConsoleMessage(consoleMessage: ConsoleMessage?): Boolean {
             consoleMessage?.let { msg ->
-                Log.d("ArtWallpaper", "${ msg.message() } :: From line ${ msg.lineNumber() } of ${ msg.sourceId() }")
+                Log.d("RendererWebView", "${ msg.message() } :: From line ${ msg.lineNumber() } of ${ msg.sourceId() }")
             }
 
             return super.onConsoleMessage(consoleMessage)
         }
     }
 
-    var isLoaded = false
+    var firstLoadComplete = false
 
     init {
         setWebContentsDebuggingEnabled(true)

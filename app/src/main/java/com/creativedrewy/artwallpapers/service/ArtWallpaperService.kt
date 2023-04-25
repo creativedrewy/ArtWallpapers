@@ -5,6 +5,7 @@ import android.content.Context
 import android.hardware.display.DisplayManager
 import android.service.wallpaper.WallpaperService
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.SurfaceHolder
 import android.view.ViewGroup
 import com.creativedrewy.artwallpapers.webview.RendererWebView
@@ -45,11 +46,13 @@ class ArtWallpaperService : WallpaperService() {
         override fun onVisibilityChanged(visible: Boolean) {
             super.onVisibilityChanged(visible)
 
+            if (rendererWebView?.firstLoadComplete == false) return
+
             if (visible) {
-                if (rendererWebView?.isLoaded == true) {
-                    rendererWebView?.loadUrl("javascript:resumeSketch()")
-                }
+                Log.v("RendererWebView", ">> Starting resume in service, isNull: ${rendererWebView == null}")
+                rendererWebView?.loadUrl("javascript:resumeSketch()")
             } else {
+                Log.v("RendererWebView", ">> Starting teardown in service")
                 rendererWebView?.loadUrl("javascript:pauseSketch()")
             }
         }
